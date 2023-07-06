@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "devback":"nodemon back.js --ignore 'client.json'"
+    "devback":"nodemon back.js --ignore 'client.json'",
+    "mqtt": "nodemon app.js & npm run devback"
   },
   "keywords": [
     "mqtt;",
