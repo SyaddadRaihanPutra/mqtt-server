@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Wheel Control</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding-top: 50px;
+      background-color: #f2f2f2;
+    }
+
+    h1 {
+      margin-bottom: 30px;
+      color: #333333;
+    }
+
+    .button {
+      padding: 12px 24px;
+      margin: 5px;
+      font-size: 18px;
+      border-radius: 50%;
+      background-color: #e0e6ef;
+      color: #65748a;
+      border: none;
+      cursor: pointer;
+      box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.1), -4px -4px 10px rgba(255, 255, 255, 0.5);
+      transition: background-color 0.3s, box-shadow 0.3s;
+    }
+
+    .button:hover {
+      background-color: #d0d6e1;
+      box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.1), -3px -3px 8px rgba(255, 255, 255, 0.5);
+    }
+
+    .button-icon {
+      font-size: 24px;
+      margin-top: 3px;
+    }
+
+    .form-input {
+      margin-bottom: 10px;
+    }
+
+    .form-button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 5px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container py-4">
+    <div class="row justify-content-center align-items-center gap-4 mb-4">
+      <div class="col-auto">
+        <img src="https://avatars.githubusercontent.com/u/109428325?s=65&v=4" class="rounded-4" alt="">
+      </div>
+      <div class="col-auto">
+        <img src="./SMKN1-JAKARTA.png" width="75" alt="">
+      </div>
+    </div>
+    <h1 class="fw-semibold" style="font-family: Poppins;">Wheel Controller</h1>
+
+    <div class="row justify-content-center align-items-center mb-4">
+      <div class="col-6">
+        <form id="urlForm">
+          <div class="mb-3">
+            <label for="serverURL" class="form-label">Enter Server URL:</label>
+            <input type="text" id="serverURL" class="form-control form-input" required>
+          </div>
+          <button type="submit" class="btn btn-primary form-button">Submit</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="row justify-content-center d-flex align-items-center mb-4" id="buttonContainer" style="display: none;">
+      <div class="col-md-6 col-6 col-sm-6" style="max-width: 250px">
+        <div class="card shadow-lg p-3 rounded-5">
+          <div class="card-body">
+            <div class="row justify-content-center">
+              <button onclick="sendOperation('/wheel/up')" class="button"><i class="fas fa-arrow-up button-icon"></i></button>
+            </div>
+            <div class="justify-content-center align-items-center d-flex">
+              <div class="col">
+                <button onclick="sendOperation('/wheel/left')" class="button"><i class="fas fa-arrow-left button-icon"></i></button>
+              </div>
+              <div class="col">
+                <button onclick="sendOperation('/wheel/right')" class="button"><i class="fas fa-arrow-right button-icon"></i></button>
+              </div>
+            </div>
+            <div class="row justify-content-center">
+              <button onclick="sendOperation('/wheel/back')" class="button"><i class="fas fa-arrow-down button-icon"></i></button>
+            </div>
+            <hr>
+            <div class="row justify-content-center">
+              <button onclick="sendOperation('/wheel/stop')" class="button bg-danger rounded-5 mt-4"><span class="text-light">STOP</span></button>
+            </div>
+          </div>
+        </div>
+        <p class="text-center mt-4"><small>SIOT CLUB | SMKN 1 Jakarta</small></p>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+ <script>
+  const formContainer = document.getElementById('urlForm');
+  const buttonContainer = document.getElementById('buttonContainer');
+
+  function sendOperation(endpoint) {
+    const url = localStorage.getItem('serverURL');
+    if (url) {
+      $.ajax({
+        url: `${url}${endpoint}`,
+        type: "GET",
+        success: function (response) {
+          console.log("Operation sent successfully");
+          console.log("Server response:", response);
+        },
+        error: function (error) {
+          console.log("Failed to send operation:", error);
+        },
+      });
+    } else {
+      alert("Please enter a URL first.");
+    }
+  }
+
+  formContainer.addEventListener('submit', function (e) {
+    e.preventDefault();
+    const url = document.getElementById('serverURL').value;
+    if (url) {
+      localStorage.setItem('serverURL', url);
+      formContainer.style.display = 'none';
+      buttonContainer.style.display = 'block';
+    }
+  });
+
+  window.addEventListener('DOMContentLoaded', function () {
+    const storedURL = localStorage.getItem('serverURL');
+    if (storedURL) {
+      formContainer.style.display = 'none';
+      buttonContainer.style.display = 'block';
+    }
+  });
+</script>
+
+
+</body>
+
+</html>
